@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
 
 async function startServer() {
   const PORT = process.env.PORT || 3000;
-  await mongoose.connect(process.env.MONGO_URI);
+  await mongoose.connect(process.env.MONGODB_URI);
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });

@@ -1,4 +1,5 @@
 const Task = require("../models/Task");
+const { generateAISubtasks } = require("../services/aiService");
 
 async function getTasks(req, res, next) {
   try {
@@ -29,10 +30,16 @@ async function createTask(req, res, next) {
 
     await task.save();
 
+    const suggestedSubtasks = await generateAISubtasks(title);
+
+
     res.status(201).json({
       success: true,
       message: "Task created successfully",
       task,
+      ai: {
+        subTasks: suggestedSubtasks
+      }
     });
   } catch (error) {
     next(error);
