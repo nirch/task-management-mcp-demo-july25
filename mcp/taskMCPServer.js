@@ -2,6 +2,7 @@ const { Server } = require("@modelcontextprotocol/sdk/server");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 const {
   ListToolsRequestSchema,
+  CallToolRequestSchema,
 } = require("@modelcontextprotocol/sdk/types.js");
 
 const server = new Server(
@@ -172,3 +173,6 @@ async function startMCPServer() {
   await server.connect(transport);
   console.log("Real MCP Server connected via stdio");
 }
+
+
+module.exports = { server, startMCPServer };

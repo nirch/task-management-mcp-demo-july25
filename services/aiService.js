@@ -1,4 +1,5 @@
 const { default: Anthropic } = require("@anthropic-ai/sdk");
+const { connectToMCP } = require("./mcpClientService");
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -35,4 +36,9 @@ Example format: ["subtask 1", "subtask 2", "subtask 3"]`;
 }
 
 
-module.exports = { generateAISubtasks }
+
+async function initializeMCP() {
+  return await connectToMCP();
+}
+
+module.exports = { generateAISubtasks, initializeMCP }
