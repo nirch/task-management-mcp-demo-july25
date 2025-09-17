@@ -1,4 +1,5 @@
 const { Server } = require("@modelcontextprotocol/sdk/server");
+const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 const {
   ListToolsRequestSchema,
 } = require("@modelcontextprotocol/sdk/types.js");
@@ -42,6 +43,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
   ],
 }));
+
 
 // Call Tool
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
@@ -149,4 +151,24 @@ async function analyzeUserTasks(userId) {
       isActiveThisWeek: recentTasks.length > 0,
     },
   };
+}
+
+if (require.main === module) {
+  const mongoose = require("mongoose");
+  const dotenv = require("dotenv");
+
+  dotenv.config();
+
+  async function main() {
+    await mongoose.connect(process.env.MONGODB_URI);
+    await startMCPServer();
+  }
+
+  main().catch(console.error);
+}
+
+async function startMCPServer() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.log("Real MCP Server connected via stdio");
 }
