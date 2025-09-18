@@ -4,6 +4,7 @@ const {
   ListToolsRequestSchema,
   CallToolRequestSchema,
 } = require("@modelcontextprotocol/sdk/types.js");
+const Task = require("../models/Task");
 
 const server = new Server(
   { name: "task-assistant", version: "1.0.0" },
@@ -171,7 +172,6 @@ if (require.main === module) {
 async function startMCPServer() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.log("Real MCP Server connected via stdio");
 }
 
 

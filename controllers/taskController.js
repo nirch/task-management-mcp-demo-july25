@@ -1,5 +1,5 @@
 const Task = require("../models/Task");
-const { generateAISubtasks } = require("../services/aiService");
+const { generateAISubtasks, chatWithMCPTools } = require("../services/aiService");
 
 async function getTasks(req, res, next) {
   try {
@@ -32,14 +32,13 @@ async function createTask(req, res, next) {
 
     const suggestedSubtasks = await generateAISubtasks(title);
 
-
     res.status(201).json({
       success: true,
       message: "Task created successfully",
       task,
       ai: {
-        subTasks: suggestedSubtasks
-      }
+        subTasks: suggestedSubtasks,
+      },
     });
   } catch (error) {
     next(error);
@@ -106,4 +105,27 @@ async function deleteTask(req, res, next) {
   }
 }
 
-module.exports = { getTasks, createTask, updateTask, deleteTask };
+async function chatAssistant(req, res, next) {
+  try {
+    const { message } = req.body;
+
+    const aiResponse = await chatWithMCPTools(message, req.user.userId);
+
+    res.json({
+      success: true,
+      message: "MCP chat response generated",
+      response: aiResponse,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+  chatAssistant,
+};
